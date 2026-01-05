@@ -33,6 +33,18 @@ app.mount("/outputs", StaticFiles(directory="outputs"), name="outputs")
 app.include_router(users.router)
 app.include_router(tts.router)
 
+@app.on_event("startup")
+async def startup_db_client():
+    try:
+        db = await get_database()
+        # Ping the database to verify connection
+        from motor.motor_asyncio import AsyncIOMotorClient
+        # We access the client through the db object's client property
+        await db.client.admin.command('ping')
+        print("✅ DATABASE CONFIG: Database connected successfully!")
+    except Exception as e:
+        print(f"❌ DATABASE CONFIG: Database connection failed: {e}")
+
 @app.get("/")
 async def root():
     db_status = "connected"
