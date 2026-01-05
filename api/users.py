@@ -6,7 +6,8 @@ from auth import get_password_hash, verify_password, create_access_token
 from datetime import timedelta, datetime
 import os
 from google.oauth2 import id_token
-from google.auth.transport import requests
+from google.auth.transport import requests as google_requests
+import requests
 from pydantic import BaseModel
 
 router = APIRouter(prefix="/auth", tags=["authentication"])
@@ -56,14 +57,38 @@ async def login(form_data: OAuth2PasswordRequestForm = Depends()):
 
 @router.post("/google", response_model=Token)
 async def google_auth(request: GoogleAuthRequest):
+    email = None
+    full_name = ""
+    
     try:
-        # Verify the ID token
-        idinfo = id_token.verify_oauth2_token(request.token, requests.Request(), GOOGLE_CLIENT_ID)
+        # 1. Try to verify as an ID Token (JWT)
+        try:
+            idinfo = id_token.verify_oauth2_token(request.token, google_requests.Request(), GOOGLE_CLIENT_ID)
+            email = idinfo['email']
+            full_name = idinfo.get('name', '')
+        except ValueError:
+            # 2. If it's not a valid ID Token, it might be an Access Token (Custom Button Flow)
+            # Fetch user info from Google API using the access token
+            user_info_response = requests.get(
+                "https://www.googleapis.com/oauth2/v3/userinfo",
+                params={"access_token": request.token}
+            )
+            if user_info_response.status_code == 200:
+                user_data = user_info_response.json()
+                email = user_data.get('email')
+                full_name = user_data.get('name', '')
+            else:
+                raise HTTPException(
+                    status_code=status.HTTP_401_UNAUTHORIZED,
+                    detail="Invalid Google token (Access Token check failed)"
+                )
 
-        # ID token is valid. Get user's Google info
-        email = idinfo['email']
-        full_name = idinfo.get('name', '')
-        
+        if not email:
+            raise HTTPException(
+                status_code=status.HTTP_401_UNAUTHORIZED,
+                detail="Could not retrieve email from Google"
+            )
+            
         db = await get_database()
         
         # Check if user exists
@@ -83,9 +108,9 @@ async def google_auth(request: GoogleAuthRequest):
         access_token = create_access_token(data={"sub": email})
         return {"access_token": access_token, "token_type": "bearer"}
         
-    except ValueError:
-        # Invalid token
+    except Exception as e:
+        print(f"Google Auth Error: {str(e)}")
         raise HTTPException(
             status_code=status.HTTP_401_UNAUTHORIZED,
-            detail="Invalid Google token"
+            detail=f"Google authentication failed: {str(e)}"
         )
