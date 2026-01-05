@@ -13,10 +13,4 @@ client = AsyncIOMotorClient(MONGODB_URL)
 db = client[DATABASE_NAME]
 
 async def get_database():
-    try:
-        # Test connection
-        await client.admin.command('ping')
-        return db
-    except Exception as e:
-        print(f"CRITICAL: Database connection failed: {e}")
-        raise e
+    return db

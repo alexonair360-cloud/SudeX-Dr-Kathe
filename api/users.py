@@ -19,26 +19,35 @@ GOOGLE_CLIENT_ID = os.getenv("GOOGLE_CLIENT_ID", "640078566704-rgvkkfilteg23ihne
 
 @router.post("/register", response_model=UserResponse)
 async def register(user: UserCreate):
-    db = await get_database()
-    
-    # Check if user exists
-    existing_user = await db.users.find_one({"email": user.email})
-    if existing_user:
-        raise HTTPException(
-            status_code=status.HTTP_400_BAD_REQUEST,
-            detail="Email already registered"
+    try:
+        db = await get_database()
+        
+        # Check if user exists
+        existing_user = await db.users.find_one({"email": user.email})
+        if existing_user:
+            raise HTTPException(
+                status_code=status.HTTP_400_BAD_REQUEST,
+                detail="Email already registered"
+            )
+        
+        hashed_password = get_password_hash(user.password)
+        user_in_db = UserInDB(
+            **user.dict(exclude={"password"}),
+            hashed_password=hashed_password
         )
-    
-    hashed_password = get_password_hash(user.password)
-    user_in_db = UserInDB(
-        **user.dict(exclude={"password"}),
-        hashed_password=hashed_password
-    )
-    
-    result = await db.users.insert_one(user_in_db.dict(by_alias=True))
-    user_in_db.id = result.inserted_id
-    
-    return UserResponse(id=str(result.inserted_id), **user.dict())
+        
+        result = await db.users.insert_one(user_in_db.dict(by_alias=True))
+        return UserResponse(id=str(result.inserted_id), **user.dict())
+    except Exception as e:
+        print(f"Registration Error: {str(e)}")
+        # If it's already an HTTPException, re-raise it
+        if isinstance(e, HTTPException):
+            raise e
+        # Otherwise, raise a 500 with the actual error message for debugging
+        raise HTTPException(
+            status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
+            detail=f"Internal Server Error: {str(e)}"
+        )
 
 @router.post("/login", response_model=Token)
 async def login(form_data: OAuth2PasswordRequestForm = Depends()):
