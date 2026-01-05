@@ -1,1 +1,14 @@
+fastapi
+uvicorn
+python-dotenv
+motor
+dnspython
+pydantic[email]
 edge-tts>=7.0.0
+python-jose[cryptography]
+passlib[bcrypt]
+python-multipart
+google-auth
+google-api-python-client
+requests
+pymongo
