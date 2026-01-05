@@ -28,7 +28,16 @@ app.include_router(tts.router)
 
 @app.get("/")
 async def root():
-    return {"message": "Welcome to Dr Kathe TTS API", "status": "running"}
+    db_status = "connected"
+    try:
+        await get_database()
+    except Exception:
+        db_status = "error"
+    return {
+        "message": "Welcome to Dr Kathe TTS API",
+        "status": "running",
+        "database": db_status
+    }
 
 if __name__ == "__main__":
     import uvicorn
