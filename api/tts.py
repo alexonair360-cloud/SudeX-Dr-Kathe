@@ -470,4 +470,11 @@ async def upload_audio(
     new_story_dict = history_item.model_dump(by_alias=True, exclude={"id"})
     new_story = await db.tts_history.insert_one(new_story_dict)
     created_story = await db.tts_history.find_one({"_id": new_story.inserted_id})
-    return created_story
+    
+    # Return the same format as generate_audio for consistency
+    return {
+        "audio_url": f"/outputs/{filename}",
+        "filename": filename,
+        "_id": str(created_story["_id"]),
+        "title": name
+    }
