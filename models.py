@@ -71,6 +71,7 @@ class TTSSettings(BaseModel):
     speed: float
     pitch: int
     style_instruction: Optional[str] = None
+    voice_style: Optional[str] = "Neutral"  # For Bhashini: Neutral, Book, Conversational, etc.
     is_premium: bool = False
 
 class TTSSegment(BaseModel):
@@ -80,6 +81,7 @@ class TTSSegment(BaseModel):
     speed: float
     pitch: int
     style_instruction: Optional[str] = None
+    voice_style: Optional[str] = "Neutral"  # For Bhashini: Neutral, Book, Conversational, etc.
 
 class TTSRequest(BaseModel):
     text: Optional[str] = None

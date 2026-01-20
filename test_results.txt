@@ -1,0 +1,12 @@
+============================================================
+Testing Hindi...
+============================================================
+Status: 400
+ERROR Response Text: Invalid 'voiceName' and/or 'voiceStyle'
+
+============================================================
+Testing Kannada...
+============================================================
+Status: 200
+SUCCESS! Audio length: 8685 bytes
+Saved to test_kannada.mp3

@@ -1,0 +1,87 @@
+BHASHINI AVAILABLE LANGUAGES AND VOICES
+============================================================
+
+English:
+  Total voices: 14
+    - en-hi-f2: English-Hindi Female 2
+      Styles: Neutral, Conversational, Command
+    - en-hi-m1: English-Hindi Male 1
+      Styles: Neutral, Book
+    - en-kn-f1: English-Kannada Female 1
+      Styles: Neutral, Book
+    - en-kn-m1: English-Kannada Male 1
+      Styles: Neutral, News, Book
+    - en-kn-m2: English-Kannada Male 2
+      Styles: Neutral, News, Book
+    - en-kok-f1: English-Konkani Female 1
+      Styles: Neutral, Book
+    - en-kok-f2: English-Konkani Female 2
+      Styles: Neutral, Book
+    - en-kok-m1: English-Konkani Male 1
+      Styles: Neutral, Book
+    - en-kok-m2: English-Konkani Male 2
+      Styles: Neutral, Book
+    - en-ml-f1: English-Malayalam Female 1
+      Styles: Neutral, Book
+    - en-ml-m1: English-Malayalam Male 1
+      Styles: Neutral, Book
+    - en-ta-f1: English-Tamil Female 1
+      Styles: Neutral, Book
+    - en-ta-m1: English-Tamil Male 1
+      Styles: Neutral, Book
+    - en-te-f1: English-Telugu Female 1
+      Styles: Neutral
+
+Hindi:
+  Total voices: 1
+    - hi-f3: Hindi Female 3
+      Styles: Neutral, News
+
+Kannada:
+  Total voices: 9
+    - kn-f1: Kannada Female 1
+      Styles: Neutral, News, Conversational, Book, Command, Happy, Sad, Fear, Disgust, Anger, Surprise
+    - kn-f2: Kannada Female 2
+      Styles: Neutral, Conversational, Book, Command, Happy, Sad, Fear, Disgust, Anger, Surprise
+    - kn-f3: Kannada Female 3
+      Styles: Neutral, News, Book
+    - kn-f4: Kannada Female 4
+      Styles: Neutral
+    - kn-f5: Kannada Female 5
+      Styles: Neutral, Book
+    - kn-m1: Kannada Male 1
+      Styles: Neutral, News, Conversational, Book, Command, Happy, Sad, Fear, Disgust, Anger, Surprise
+    - kn-m2: Kannada Male 2
+      Styles: Neutral, Book
+    - kn-m3: Kannada Male 3
+      Styles: Neutral, News, Conversational, Book
+    - kn-m4: Kannada Male 4
+      Styles: Neutral, Conversational, Command, Happy, Sad, Fear, Disgust, Anger, Surprise
+
+Marathi:
+  Total voices: 12
+    - mr-f1: Marathi Female 1
+      Styles: Neutral, News, Conversational, Book, Command, Happy, Sad, Fear, Disgust, Anger, Surprise
+    - mr-f2: Marathi Female 2
+      Styles: Neutral, Book
+    - mr-f3: Marathi Female 3
+      Styles: Neutral
+    - mr-f4: Marathi Female 4
+      Styles: Neutral, Book
+    - mr-f5: Marathi Female 5
+      Styles: Neutral
+    - mr-f6: Marathi Female 6
+      Styles: Neutral
+    - mr-m1: Marathi Male 1
+      Styles: Neutral, News, Conversational, Book, Command, Happy, Sad, Fear, Disgust, Anger, Surprise
+    - mr-m2: Marathi Male 2
+      Styles: Neutral, Book
+    - mr-m3: Marathi Male 3
+      Styles: Neutral, News, Book
+    - mr-m4: Marathi Male 4
+      Styles: Neutral, News, Book
+    - mr-m5: Marathi Male 5
+      Styles: Neutral
+    - mr-m6: Marathi Male 6
+      Styles: Neutral
+

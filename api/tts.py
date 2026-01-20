@@ -70,26 +70,35 @@ async def generate_audio(request: TTSRequest, current_user: UserInDB = Depends(g
                 # Use settings from first segment
                 target_lang = request.segments[0].language
                 target_voice = request.segments[0].persona
+                voice_style = getattr(request.segments[0], 'voice_style', 'Neutral')
+                speech_rate = request.segments[0].speed
                 base_settings = TTSSettings(
                     language=target_lang,
                     persona=target_voice,
                     speed=request.segments[0].speed,
                     pitch=request.segments[0].pitch,
+                    voice_style=voice_style,
                     is_premium=True
                 )
             else:
                 text_to_process = request.text
                 target_lang = request.settings.language
                 target_voice = request.settings.persona
+                voice_style = getattr(request.settings, 'voice_style', 'Neutral')
+                speech_rate = request.settings.speed
                 base_settings = request.settings
 
             # Generate with Bhashini
-            print(f"DEBUG: Premium Bhashini Request: {text_to_process[:50]}... Lang: {target_lang}")
+            print(f"DEBUG: Premium Bhashini Request: {text_to_process[:50]}... Lang: {target_lang}, Style: {voice_style}")
             
-            # Since Bhashini doesn't support streaming easily in this setup, we wait for full audio
-            # Note: This is a placeholder call. Real implementation needs specific Bhashini logic.
-            # For now, Bhashini service raises exception or returns mock data.
-            audio_data = await bhashini.generate_bhashini_audio(text_to_process, target_lang, target_voice)
+            # Call Bhashini with voice style and speech rate
+            audio_data = await bhashini.generate_bhashini_audio(
+                text=text_to_process, 
+                language=target_lang, 
+                voice_id=target_voice,
+                voice_style=voice_style,
+                speech_rate=speech_rate
+            )
             
             # Save to file
             if request.title:
@@ -101,7 +110,7 @@ async def generate_audio(request: TTSRequest, current_user: UserInDB = Depends(g
                 
             filepath = os.path.join(OUTPUT_DIR, filename)
             with open(filepath, "wb") as f:
-                f.write(audio_data) # Assuming byte content
+                f.write(audio_data)
                 
             # History Saving (Common logic)
             db = await get_database()
@@ -110,8 +119,7 @@ async def generate_audio(request: TTSRequest, current_user: UserInDB = Depends(g
                 title=request.title,
                 text=text_to_process.strip(),
                 settings=base_settings,
-                audio_path=filepath,
-                is_premium=True
+                audio_path=filepath
             )
             
             history_dict = history.dict(by_alias=True)
